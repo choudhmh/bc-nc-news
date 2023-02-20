@@ -8,6 +8,10 @@ Your database will be PSQL, and you will interact with it using [node-postgres](
 
 ## Kanban
 
+env files:
+
+.env.test = PGDATABASE=nc_news_test
+.env.development = PGDATABASE=nc_news
 
 
 ## Git Branching and Pull Requests
