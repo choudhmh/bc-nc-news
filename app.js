@@ -1,5 +1,5 @@
 const express = require('express');
-//const { serverError } = require('./controller/errorController');
+
 
 const {
  
@@ -9,7 +9,7 @@ const {
 
 const {
  
-  sendArticles,
+  sendArticles, GetArticlesById,
   
 } = require('./controllers/articles');
 
@@ -20,6 +20,10 @@ const app = express();
 app.get('/api/topics', sendTopics);
 
 app.get('/api/articles', sendArticles);
+
+app.get('/api/articles/:article_id', GetArticlesById);
+
+
 
 app.use((err, req, res, next) => {
   console.log(err);
