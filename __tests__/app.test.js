@@ -105,13 +105,11 @@ beforeEach(() => {
 
   })
 
-  it('Response 400 and appropriate message if article_id is a number but article does not exist', () => {
+  it.only('Response 404 and appropriate message if article_id is a number but article does not exist', () => {
     return request(app)
         .get('/api/articles/10000000')
         .expect(404)
         .then((response) => {
-
-console.log(response.body)
   
            expect(response.body.msg).toEqual('Not Found')
         })
@@ -119,15 +117,14 @@ console.log(response.body)
 
 
 
-it.only('Response 400 and appropriate message if article_id is not a number', () => {
+it('Response 400 and appropriate message if article_id is not a number', () => {
     return request(app)
         .get('/api/articles/banana')
         .expect(400)
         .then((response) => {
           let articles = response.body.msg
 
-          console.log(articles)
-            expect(articles).toBe('Invalid ID')
+            expect(articles).toEqual('Invalid ID')
         })
 })
 

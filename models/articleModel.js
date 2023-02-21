@@ -22,8 +22,7 @@ function fetchArticles() {
 
         if (article.rows.length === 0) {
           
-          return Promise.reject(
-            
+          return Promise.reject(      
             `article not found!!!`
           );
         } else {
