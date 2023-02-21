@@ -110,7 +110,8 @@ beforeEach(() => {
         .get('/api/articles/10000000')
         .expect(404)
         .then((response) => {
-  
+ 
+          
            expect(response.body.msg).toEqual('Not Found')
         })
 })
