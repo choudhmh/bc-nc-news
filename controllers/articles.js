@@ -5,7 +5,6 @@ function sendArticles(req, res, next) {
  
     fetchArticles()
       .then((article) => {
-      
 
         res.status(200).send({
           article,
@@ -24,7 +23,6 @@ function sendArticles(req, res, next) {
     getArticlesId(article_id)
       .then((article) => {
         
-        //console.log(article)
 
         res.status(200).send({
           article,
