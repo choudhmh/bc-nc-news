@@ -18,17 +18,22 @@ function fetchArticles() {
     return db.query('SELECT articles.article_id, articles.author, articles.title, articles.topic, articles.created_at, articles.votes, CAST(COUNT(comments.comment_id)AS INT) AS comment_count FROM articles LEFT JOIN comments ON comments.article_id = articles.article_id WHERE articles.article_id = $1 GROUP BY articles.article_id;',[article_id])
 
       .then(article => {
-        if (article.length === 0) {
-          return Promise.reject({
-            status: 404,
-            msg: `article ${article_id} not found!!!`
-          });
-        }
+      
+
+        if (article.rows.length === 0) {
+          
+          return Promise.reject(
+            
+            `article not found!!!`
+          );
+        } else {
         return article.rows;
-        //return article[0];
+        }
       });
   }
 
+
+ 
 
 
 

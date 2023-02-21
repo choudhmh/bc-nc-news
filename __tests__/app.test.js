@@ -51,7 +51,6 @@ beforeEach(() => {
 
             let articles = response.body.article
 
-            console.log( articles);
 
             expect(articles).toBeInstanceOf(Array);
             expect(articles.length).toBe(12);
@@ -77,7 +76,7 @@ beforeEach(() => {
     
     })
 
-    describe.only('api/articles/:articleId', () => {
+    describe('api/articles/:articleId', () => {
 
     it('GET /:article_id to return 200 and an object containing article key and an array of article', () => {
       return request(app)
@@ -87,9 +86,7 @@ beforeEach(() => {
 
           let articles = response.body.article
 
-          console.log( articles);
-
-          expect(articles).toBeInstanceOf(Array);
+          expect(articles).toBeInstanceOf(Object);
           expect(articles.length).toBe(1);
          
           articles.forEach((article) => {
@@ -105,6 +102,35 @@ beforeEach(() => {
           }))
         });
     });
-  })
 
   })
+
+  it('Response 400 and appropriate message if article_id is a number but article does not exist', () => {
+    return request(app)
+        .get('/api/articles/10000000')
+        .expect(404)
+        .then((response) => {
+
+console.log(response.body)
+  
+           expect(response.body.msg).toEqual('Not Found')
+        })
+})
+
+
+
+it.only('Response 400 and appropriate message if article_id is not a number', () => {
+    return request(app)
+        .get('/api/articles/banana')
+        .expect(400)
+        .then((response) => {
+          let articles = response.body.msg
+
+          console.log(articles)
+            expect(articles).toBe('Invalid ID')
+        })
+})
+
+  })
+
+  
