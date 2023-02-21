@@ -11,6 +11,8 @@ function fetchTopics() {
   });
 }
 
+
+
 module.exports = {
   fetchTopics,
 };

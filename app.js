@@ -3,9 +3,15 @@ const express = require('express');
 
 const {
  
-  sendTopics,
+  sendTopics, 
   
 } = require('./controllers/topics');
+
+const {
+ 
+  sendArticles,
+  
+} = require('./controllers/articles');
 
 const app = express();
 
@@ -13,6 +19,12 @@ const app = express();
 
 app.get('/api/topics', sendTopics);
 
+app.get('/api/articles', sendArticles);
+
+app.use((err, req, res, next) => {
+  console.log(err);
+  res.status(500).send('Server Error!');
+});
 
 
 module.exports = app;

@@ -15,4 +15,6 @@ function sendTopics(req, res, next) {
       });
   }
 
-module.exports = { sendTopics };
+  
+
+module.exports = { sendTopics,};
