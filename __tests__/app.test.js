@@ -33,7 +33,7 @@ beforeEach(() => {
                   description: expect.any(String),
                 }))
 
-            //expect(topics[0]).forEach(["slug", "description"]);
+       
           });
       });
       });
@@ -51,7 +51,6 @@ beforeEach(() => {
 
             let articles = response.body.article
 
-            console.log( articles);
 
             expect(articles).toBeInstanceOf(Array);
             expect(articles.length).toBe(12);
@@ -62,7 +61,7 @@ beforeEach(() => {
                   author: expect.any(String),
                   title: expect.any(String),
                   article_id: expect.any(Number),
-                //body: expect.any(String),
+               
                   topic: expect.any(String),
                   created_at: expect.any(String),
                   votes: expect.any(Number),
@@ -77,30 +76,58 @@ beforeEach(() => {
     
     })
 
+    describe('api/articles/:articleId', () => {
 
-    // describe('GET /api/articles', () => {
-    //   test('Response 200 and returns object with key articles containing array of articles', () => {
-    //       return request(app)
-    //           .get('/api/articles')
-    //           .expect(200)
-    //           .then(({ body }) => {
-    //               expect(body.articles).toHaveLength(12);
-    //               body.articles.forEach(article => {
-    //                   expect(article).toEqual(expect.objectContaining({
-    //                       article_id: expect.any(Number),
-    //                       title: expect.any(String),
-    //                       topic: expect.any(String),
-    //                       author: expect.any(String),
-    //                       body: expect.any(String),
-    //                       created_at: expect.any(String),
-    //                       votes: expect.any(Number),
-    //                       comment_count: expect.any(String)
-    //                   }))
-    //               })
-    //           })
-    //   })
-    // })
+    it('GET /:article_id to return 200 and an object containing article key and an array of article', () => {
+      return request(app)
+        .get('/api/articles/1')
+        .expect(200)
+        .then((response) => {
+
+          let articles = response.body.article
+
+          expect(articles).toBeInstanceOf(Object);
+          expect(articles.length).toBe(1);
+         
+          articles.forEach((article) => {
+            expect(article).toEqual(
+              expect.objectContaining({
+                article_id: 1,
+                author: 'butter_bridge',
+                title: 'Living in the shadow of a great man',
+                topic: 'mitch',
+                created_at: '2020-07-09T20:11:00.000Z',
+                votes: 100,
+                comment_count: 11
+          }))
+        });
+    });
+
+  })
+
+  it.only('Response 404 and appropriate message if article_id is a number but article does not exist', () => {
+    return request(app)
+        .get('/api/articles/10000000')
+        .expect(404)
+        .then((response) => {
  
+           expect(response.body.msg).toEqual('Not Found')
+        })
+})
 
 
-   
+
+it('Response 400 and appropriate message if article_id is not a number', () => {
+    return request(app)
+        .get('/api/articles/banana')
+        .expect(400)
+        .then((response) => {
+          let articles = response.body.msg
+
+            expect(articles).toEqual('Invalid ID')
+        })
+})
+
+  })
+
+  
