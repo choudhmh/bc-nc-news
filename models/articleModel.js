@@ -31,14 +31,34 @@ function fetchArticles() {
       });
   }
 
+  function fetchCommentsById (article_id) {
+    
 
- 
+    return db.query('SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at ASC;', [article_id])
+
+      .then(article => {
+      
+        console.log(article.rows)
+
+        if (article.rows.length === 0) {
+          
+          return Promise.reject(      
+            `article not found!!!`
+          );
+        } else {
+        return article.rows;
+        }
+      });
+  }
 
 
 
+
+    
+   
 
    module.exports = {
-    fetchArticles, getArticlesId,
+    fetchArticles, getArticlesId, fetchCommentsById,
   };
 
   

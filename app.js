@@ -1,5 +1,8 @@
 const express = require('express');
 
+const { handleServerErrors,
+  handlePsqlErrors,
+  handleCustomErrors } = require("./errors/errors.js");
 
 const {
  
@@ -9,7 +12,7 @@ const {
 
 const {
  
-  sendArticles, GetArticlesById, 
+  sendArticles, GetArticlesById, getCommentById,
   
 } = require('./controllers/articles');
 
@@ -22,23 +25,31 @@ app.get('/api/articles', sendArticles);
 
 app.get('/api/articles/:article_id', GetArticlesById);
 
+app.get('/api/articles/:article_id/comments', getCommentById)
 
-
-app.use((err, req, res, next) => {
-  res.status(404).send({msg: 'Not Found'});
-});
-
-app.use((err, req, res, next) => {
-  if( err.code = '22P02' ){
-    res.status(400).send({msg: 'Invalid ID'})
-  }
-});
+app.use(handleCustomErrors);
+app.use(handlePsqlErrors);
+app.use(handleServerErrors);
 
 
 
-app.use((err, req, res, next) => {
-  res.status(500).send('Server Error!');
-});
+
+
+// app.use((err, req, res, next) => {
+//   if( err.code = '22P02' ){
+//   res.status(404).send({msg: 'Not Found'});
+//   }else next(err);
+// });
+
+// app.use((err, req, res, next) => {
+//   if (err.code = '22P02') res.status(400).send({ message: `Invalid ID` })
+//   else next(err);
+// });
+
+
+// app.use((err, req, res, next) => {
+//   res.status(500).send('Server Error!');
+// });
 
 
 

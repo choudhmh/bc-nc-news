@@ -105,29 +105,60 @@ beforeEach(() => {
 
   })
 
-  it.only('Response 404 and appropriate message if article_id is a number but article does not exist', () => {
-    return request(app)
-        .get('/api/articles/10000000')
-        .expect(404)
-        .then((response) => {
- 
-           expect(response.body.msg).toEqual('Not Found')
-        })
+
+test('Response 400 and appropriate message if article_id is a number but article does not exist', () => {
+  return request(app)
+      .get('/api/articles/10000000')
+      .expect(400)
+      .then(({ body }) => {
+          expect(body.message).toEqual('Bad Request')
+      })
 })
 
-
-
-it('Response 400 and appropriate message if article_id is not a number', () => {
-    return request(app)
-        .get('/api/articles/banana')
-        .expect(400)
-        .then((response) => {
-          let articles = response.body.msg
-
-            expect(articles).toEqual('Invalid ID')
-        })
+test('Response 400 and appropriate message if article_id is not a number', () => {
+  return request(app)
+      .get('/api/articles/banana')
+      .expect(400)
+      .then(({ body }) => {
+          expect(body.message).toEqual('Bad Request')
+      })
 })
-
   })
 
   
+
+
+  describe('api/articles/:articleId/comments', () => {
+
+    it.only('GET /:article_id with comments for that id  return 200 and an object containing article key, an array of article with comments', () => {
+      
+      return request(app)
+        .get('/api/articles/1/comments')
+          .expect(200)
+            .then((response) => {
+
+      let articles = response.body.article
+
+
+          expect(articles).toBeInstanceOf(Array);
+          expect(articles.length).toBe(11);
+         
+          articles.forEach((article) => {
+            expect(article).toEqual(
+              expect.objectContaining({
+              
+                article_id: expect.any(Number),
+                comment_id: expect.any(Number),
+body:expect.any(String),
+                author: expect.any(String),
+                created_at: expect.any(String),
+                votes: expect.any(Number)
+              }))
+            })
+            
+            })
+          })
+
+          
+
+  })
