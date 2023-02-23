@@ -12,11 +12,12 @@ const {
 
 const {
  
-  sendArticles, GetArticlesById, getCommentById,
+  sendArticles, GetArticlesById, getCommentById, postCommentsById,
   
 } = require('./controllers/articles');
 
 const app = express();
+app.use(express.json());
 
 
 app.get('/api/topics', sendTopics);
@@ -27,9 +28,17 @@ app.get('/api/articles/:article_id', GetArticlesById);
 
 app.get('/api/articles/:article_id/comments', getCommentById)
 
+app.post('/api/articles/:article_id/comments', postCommentsById)
+
+
+app.all("/*", (req, res) => {
+  res.status(404).send({ message: "route not found" });
+});
+
 app.use(handleCustomErrors);
 app.use(handlePsqlErrors);
 app.use(handleServerErrors);
+
 
 
 

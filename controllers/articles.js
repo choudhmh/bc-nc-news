@@ -1,4 +1,4 @@
-const { fetchArticles, getArticlesId, fetchCommentsById, } = require("../models/articleModel");
+const { fetchArticles, getArticlesId, fetchCommentsById, insertComments} = require("../models/articleModel");
 
 
 function sendArticles(req, res, next) {
@@ -33,16 +33,11 @@ function sendArticles(req, res, next) {
   }
 
   function getCommentById(req, res, next) {
-
     const  {article_id }= req.params;
-
-
     fetchCommentsById(article_id)
-      .then((article) => {
-        
-
+      .then((comment) => {
         res.status(200).send({
-          article,
+          comment,
         });
       })
       .catch((err) => {
@@ -50,10 +45,26 @@ function sendArticles(req, res, next) {
       });
   }
 
+  
+  function postCommentsById(req, res, next) {
+    const { article_id } = req.params;
+    const { username, body } = req.body;
 
+
+    insertComments(article_id, body, username)
+      .then((comment) => {
+        res.status(201).send({
+          comment,
+        });
+        
+      })
+      .catch((err) => {
+        next(err);
+      });
+  }
 
 
   
 
-  module.exports = { sendArticles, GetArticlesById, getCommentById };
+  module.exports = { sendArticles, GetArticlesById, getCommentById, postCommentsById };
 

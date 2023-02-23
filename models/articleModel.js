@@ -33,32 +33,49 @@ function fetchArticles() {
 
   function fetchCommentsById (article_id) {
     
-
     return db.query('SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at ASC;', [article_id])
 
-      .then(article => {
-      
-        console.log(article.rows)
+      .then(comment => {
+  
 
-        if (article.rows.length === 0) {
+        if (comment.rows.length === 0) {
           
           return Promise.reject(      
             `article not found!!!`
           );
         } else {
-        return article.rows;
+        return comment.rows;
         }
       });
   }
 
+  const insertComments = (article_id, body, username) =>{
+    
+    return db.query(`INSERT INTO comments (body,author,article_id)
+    VALUES ($1,$2,$3) RETURNING *;`, 
+    [body, username, article_id])
 
+   
+      .then((data) => {
+        if (data.rows.length === 0) {
+          
+          return Promise.reject(      
+            `article not found!!!`
+          );
+        } else {
+ return data.rows;
+        }
+        })
+      
+      }
 
+ 
 
     
-   
+  
 
    module.exports = {
-    fetchArticles, getArticlesId, fetchCommentsById,
+    fetchArticles, getArticlesId, fetchCommentsById, insertComments,
   };
 
   
