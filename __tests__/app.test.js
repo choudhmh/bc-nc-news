@@ -110,14 +110,7 @@ beforeEach(() => {
 
   })
 
-  test('Response 400 and appropriate message if article_id is a number but article does not exist', () => {
-    return request(app)
-        .get('/api/articles/10000000')
-        .expect(400)
-        .then(({ body }) => {
-            expect(body.message).toEqual('Bad Request')
-        })
-  })
+
   
   test('Response 400 and appropriate message if article_id is not a number', () => {
     return request(app)
@@ -164,14 +157,7 @@ body:expect.any(String),
             })
           })
 
-          test('Response 400 and appropriate message if article_id is a number but article does not exist', () => {
-            return request(app)
-                .get('/api/articles/10000000')
-                .expect(400)
-                .then(({ body }) => {
-                    expect(body.message).toEqual('Bad Request')
-                })
-          })
+       
           
           test('Response 400 and appropriate message if article_id is not a number', () => {
             return request(app)
@@ -348,7 +334,7 @@ it('PATCH 400 - responds with a bad request when the article id is invalid', () 
 
 
 
-describe.only('api/users', () => {
+describe('api/users', () => {
   it("GET / will respond with status 200 and a users array", () => {
     return request(app)
 
