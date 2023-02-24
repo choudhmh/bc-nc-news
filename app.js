@@ -12,9 +12,15 @@ const {
 
 const {
  
-  sendArticles, GetArticlesById, getCommentById, postCommentsById,
+  sendArticles, GetArticlesById, getCommentById, postCommentsById, patchArticleById,
   
 } = require('./controllers/articles');
+
+const {
+ 
+  getUsers, 
+  
+} = require('./controllers/users');
 
 const app = express();
 app.use(express.json());
@@ -29,6 +35,12 @@ app.get('/api/articles/:article_id', GetArticlesById);
 app.get('/api/articles/:article_id/comments', getCommentById)
 
 app.post('/api/articles/:article_id/comments', postCommentsById)
+
+
+app.patch('/api/articles/:article_id', patchArticleById)
+
+
+app.get('/api/users', getUsers)
 
 
 app.all("/*", (req, res) => {

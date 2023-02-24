@@ -6,6 +6,8 @@ const app = require('../app');
 const seed = require('../db/seeds/seed');
 const data = require('../db/data/test-data/index');
 
+//const users = require('../db/data/test-data/users');
+
 
 
 beforeEach(() => {
@@ -73,6 +75,7 @@ beforeEach(() => {
           });
       });
       });
+
     
     })
 
@@ -85,6 +88,8 @@ beforeEach(() => {
         .then((response) => {
 
           let articles = response.body.article
+
+        
 
           expect(articles).toBeInstanceOf(Object);
           expect(articles.length).toBe(1);
@@ -105,25 +110,26 @@ beforeEach(() => {
 
   })
 
-
-test('Response 400 and appropriate message if article_id is a number but article does not exist', () => {
-  return request(app)
-      .get('/api/articles/10000000')
-      .expect(400)
-      .then(({ body }) => {
-          expect(body.message).toEqual('Bad Request')
-      })
-})
-
-test('Response 400 and appropriate message if article_id is not a number', () => {
-  return request(app)
-      .get('/api/articles/banana')
-      .expect(400)
-      .then(({ body }) => {
-          expect(body.message).toEqual('Bad Request')
-      })
-})
+  test('Response 400 and appropriate message if article_id is a number but article does not exist', () => {
+    return request(app)
+        .get('/api/articles/10000000')
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.message).toEqual('Bad Request')
+        })
   })
+  
+  test('Response 400 and appropriate message if article_id is not a number', () => {
+    return request(app)
+        .get('/api/articles/banana')
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.message).toEqual('Bad Request')
+        })
+  })
+
+
+    })
 
   
 
@@ -175,6 +181,8 @@ body:expect.any(String),
                     expect(body.message).toEqual('Bad Request')
                 })
           })
+
+      
           
         
   })
@@ -182,7 +190,7 @@ body:expect.any(String),
   
 
   describe('POST /api/articles/:article_id/comments', () => {
-    it.only('Response 201 and returns newly inserted comment in an object with key of comment', () => {
+    it('Response 201 and returns newly inserted comment in an object with key of comment', () => {
         const newComment = {
             username: `butter_bridge`,
             body: `Posting a new comment`
@@ -203,61 +211,169 @@ body:expect.any(String),
             })
     })
 
-    it('should respond with a status 400 Bad request', ()=>{
-      return request(app)
-      .post('/api/articles/15/comments')
-      .send({username: 'butter_bridge', body: 'Posting a new comment'})
-      .expect(400)
-      .then(({ body }) => {
-          expect(body.msg).toBe('Bad request');
-      })
-    })
   
-    it('Response 400 and appropriate message if article_id is a number but article does not exist', () => {
+    it("POST: 400 - responds with an error when given an invalid ID", () => {
       return request(app)
-          .get('/api/articles/10000000')
-          .expect(400)
-          .then(({ body }) => {
-              expect(body.msg).toEqual('Bad Request')
-          })
-    })
-
-    it('200: GET - responds with server ok message', () => {
+        .post("/api/articles/abc/comments")
+        .send({ body: "new comment", username: "butter_bridge" })
+        .expect(400)
+        .then((res) => {
+          expect(res.body.message).toEqual("Bad Request");
+        });
+    });
+    it("POST: 400 - responds with an error when given a body missing a property", () => {
       return request(app)
-        .get('/api')
-        .expect(200)
-        .then((response) => {
-          console.log(response.body, 'RESPONSE BODY');
-          expect(response.body.msg).toBe('Server is OK');
+        .post("/api/articles/1/comments")
+        .send({ username: "butter_bridge" })
+        .expect(400)
+        .then((res) => {
+          expect(res.body.message).toEqual("Bad Request");
+        });
+    });
+    it("POST: 404 - responds with an error when the username does not exist", () => {
+      return request(app)
+        .post("/api/articles/1/comments")
+        .send({ body: "New comment", username: "mahmud" })
+        .expect(404)
+        .then((res) => {
+          expect(res.body.message).toEqual("Not Found");
         });
     });
 
+
+    it('Response 400 and appropriate message if article_id is not a number', () => {
+      return request(app)
+          .get('/api/articles/banana/comments')
+          .expect(400)
+          .then(({ body }) => {
+              expect(body.message).toEqual('Bad Request')
+          })
+    })
+
+
+  
+
+  })
+        
+    
+
+describe('PATCH requests', () => {
+
+  it('PATCH 200 - responds with an object containing the updated article (article 1))', () => {
+      return request(app)
+          .patch('/api/articles/1')
+          .send({ inc_votes: 100 })
+          
+          .expect(
+            200
+           )
+            
+            
+          .then(({body}) => {
+          
+              expect(body.article[0]).toEqual(
+                
+                  expect.objectContaining({
+                      article_id: expect.any(Number),
+                      author: expect.any(String),
+                      body: expect.any(String),
+                      created_at: expect.any(String),
+                      title: expect.any(String),
+                      topic: expect.any(String),
+                      votes: expect.any(Number),     
+                  })
+              )
+              expect(body.article[0].votes).toEqual(200)
+      })
+  })
+
+  it('PATCH 200 - responds with an object containing the updated article (article 2))', () => {
+    return request(app)
+        .patch('/api/articles/2')
+        .send({ inc_votes: -10 })
+        .expect(200)
+        .then(({body}) => {
+            expect(body.article[0]).toEqual(
+                expect.objectContaining({
+                  article_id: expect.any(Number),
+                  author: expect.any(String),
+                  body: expect.any(String),
+                  created_at: expect.any(String),
+                  title: expect.any(String),
+                  topic: expect.any(String),
+                  votes: expect.any(Number), 
+                })
+            )
+            expect(body.article[0].votes).toEqual(-10)
+    })
 })
 
-describe('POST /api/articles', () => {
-  const newArticle = {
-      title: "testArticle",
-      topic: "mitch",
-      author: "butter_bridge",
-      body: "Lorem ipsum dolor sit amet",
-  }
-  test('Response 200', () => {
-      return request(app)
-          .post('/api/articles')
-          .send(newArticle)
-          .expect(201)
-          .then(({ body }) => {
-              expect(body.article).toEqual(
-                  {
-                      article_id: expect.any(Number),
-                      votes: 0,
-                      created_at: expect.any(String),
-                      title: "testArticle",
-                      topic: "mitch",
-                      author: "butter_bridge",
-                      body: "Lorem ipsum dolor sit amet",
-                      comment_count: "0"
-                  })
-          });
-  })
+it('PATCH 400 - responds with bad request when the vote change is not a number', () => {
+    return request(app)
+        .patch('/api/articles/1')
+        .send({inc_votes: 'ten'})
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.message).toBe('Bad Request' )
+        })
 })
+
+it('PATCH 404 - responds with not found when the article id is valid but not present', () => {
+    return request(app)
+        .patch('/api/articles/1020')
+        .send({ inc_votes: 100 })
+        .expect(200);
+})
+
+it('PATCH 400 - responds with bad request when the object in the body is badly formatted', () => {
+    return request(app)
+        .patch('/api/articles/3')
+        .send({ cni_steov: 100 })
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.message).toBe('Bad request' )
+        })
+})
+
+it('PATCH 400 - responds with a bad request when the article id is invalid', () => {
+    return request(app)
+        .patch('/api/articles/notvalid')
+        .send({ inc_votes: 100 })
+        .expect(400)
+        .then(({ body }) => {
+            expect(body.message).toBe('Bad Request' )
+        })
+})
+})
+
+
+
+describe.only('api/users', () => {
+  it("GET / will respond with status 200 and a users array", () => {
+    return request(app)
+
+      .get("/api/users")
+      .expect(200)
+      .then((response) => {
+
+        const users = response.body.user
+
+        expect(users).toBeInstanceOf(Array);
+
+        expect(users.length).toBe(4);
+
+        users.forEach((users) => {
+          expect(users).toEqual(
+            expect.objectContaining({
+              username: expect.any(String),
+              name: expect.any(String),
+              avatar_url: expect.any(String),
+            }))
+
+   
+      });
+  });
+  });
+
+})
+

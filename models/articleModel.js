@@ -66,16 +66,33 @@ function fetchArticles() {
  return data.rows;
         }
         })
-      
       }
 
+
+
+    const incVoteById = (article_id, inc_votes) => {
+    
+
+        if (inc_votes === undefined) throw ({status: 400, message: 'Bad request'})
+        else 
+
+        return db.query('UPDATE articles SET votes = votes + $2 WHERE article_id= $1 RETURNING *;',[article_id, inc_votes])
+
+            .then((response) => {
+           
+                 return response.rows;
+            })
+    }
+  
+
+      
  
 
     
   
 
    module.exports = {
-    fetchArticles, getArticlesId, fetchCommentsById, insertComments,
+    fetchArticles, getArticlesId, fetchCommentsById, insertComments, incVoteById,
   };
 
   
