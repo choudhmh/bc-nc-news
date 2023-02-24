@@ -1,10 +1,10 @@
 
-
 const request = require('supertest');
 const connection = require('../db/connection');
 const app = require('../app');
 const seed = require('../db/seeds/seed');
 const data = require('../db/data/test-data/index');
+
 
 //const users = require('../db/data/test-data/users');
 
@@ -156,8 +156,6 @@ body:expect.any(String),
             
             })
           })
-
-       
           
           test('Response 400 and appropriate message if article_id is not a number', () => {
             return request(app)
@@ -169,10 +167,29 @@ body:expect.any(String),
           })
 
       
-          
+          test('Response 404 and appropriate message if article_id is a number but article does not exist', () => {
+            return request(app)
+                .get('/api/articles/10000/comments')
+                .expect(404)
+                .then(({ body }) => {
+                    expect(body.message).toEqual('Not Found')
+                })  
         
   })
+  
+//   test('Response 200 empty array for an article that exists but has no comments', () => {
+//     return request(app)
+//         .get('/api/articles/2/comments')
+//         .expect(200)
+//         .then(({ body }) => { 
+//             expect(body.comments).toEqual([])
+//         })  
 
+// })
+
+
+
+  })
   
 
   describe('POST /api/articles/:article_id/comments', () => {
@@ -362,4 +379,29 @@ describe('api/users', () => {
   });
 
 })
+
+
+// describe('api/articles', ()=>{
+
+// test('Should accept a topic query and will respond with only articles are of that topic', () => {
+//   return request(app)
+//       .get('/api/articles?topic=cats')
+//       .expect(200)
+//       .then(({ body }) => {
+//           expect(body.articles).toEqual(
+//               {
+//                   title: 'UNCOVERED: catspiracy to bring down democracy',
+//                   topic: 'cats',
+//                   author: 'rogersop',
+//                   body: 'Bastet walks amongst us, and the cats are taking arms!',
+//                   created_at: expect.any(String),
+//                   votes: 0,
+//                   comment_count: "2",
+//                   article_id: 5,
+//                   total_count: "1"
+//               }
+//           )
+//       })
+// })
+// })
 

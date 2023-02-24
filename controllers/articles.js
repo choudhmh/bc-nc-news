@@ -1,4 +1,4 @@
-const { fetchArticles, getArticlesId, fetchCommentsById, insertComments,incVoteById,} = require("../models/articleModel");
+const { fetchArticles, getArticlesId, fetchCommentsById, insertComments,incVoteById, getQuery,} = require("../models/articleModel");
 
 
 function sendArticles(req, res, next) {
@@ -81,9 +81,24 @@ function sendArticles(req, res, next) {
         });
 }
 
+// function getArticeQuery (req, res, next) {
+//   const { article_id } = req.params;
+//   const { topic } = req.params;
+
+//   getQuery(article_id, topic)
+
+//       .then((article) => {
+//           res.status(200).send({ article });
+//       })
+//       .catch((err) => {
+
+//         next(err);
+//       });
+// }
+
 
 
   
 
-  module.exports = { sendArticles, GetArticlesById, getCommentById, postCommentsById, patchArticleById, };
+  module.exports = { sendArticles, GetArticlesById, getCommentById, postCommentsById, patchArticleById,  };
 
