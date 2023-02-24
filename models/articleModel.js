@@ -37,13 +37,18 @@ function fetchArticles() {
 
       .then(comment => {
   
-
         if (comment.rows.length === 0) {
-          
-          return Promise.reject(      
-            `article not found!!!`
+ 
+          return Promise.reject(                
+            {
+              status: 404,
+              message: `Not Found` 
+            }
           );
-        } else {
+        } 
+
+      
+        else {
         return comment.rows;
         }
       });
@@ -85,6 +90,18 @@ function fetchArticles() {
     }
   
 
+
+// const getQuery = (article_id, topic) =>{
+  
+//   return db.query('SELECT articles.article_id, articles.author, articles.title, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.comment_id)AS INT) AS comment_count FROM article LEFT OUTER JOIN comments ON comments.article_id = articles.article_id COUNT(DISTINCT articles.article_id) AS total_count ORDER BY created_at DESC;', [article_id, topic])
+
+//   .then((result) => {
+
+// console.log(result)
+//     return result.rows;
+//   });
+
+// }
       
  
 
@@ -92,7 +109,7 @@ function fetchArticles() {
   
 
    module.exports = {
-    fetchArticles, getArticlesId, fetchCommentsById, insertComments, incVoteById,
+    fetchArticles, getArticlesId, fetchCommentsById, insertComments, incVoteById,  
   };
 
   

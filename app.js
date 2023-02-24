@@ -12,7 +12,7 @@ const {
 
 const {
  
-  sendArticles, GetArticlesById, getCommentById, postCommentsById, patchArticleById,
+  sendArticles, GetArticlesById, getCommentById, postCommentsById, patchArticleById, getArticeQuery,
   
 } = require('./controllers/articles');
 
@@ -42,6 +42,8 @@ app.patch('/api/articles/:article_id', patchArticleById)
 
 app.get('/api/users', getUsers)
 
+
+//app.get('/api/articles', getArticeQuery)
 
 app.all("/*", (req, res) => {
   res.status(404).send({ message: "route not found" });
