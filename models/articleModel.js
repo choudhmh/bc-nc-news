@@ -31,14 +31,68 @@ function fetchArticles() {
       });
   }
 
+  function fetchCommentsById (article_id) {
+    
+    return db.query('SELECT * FROM comments WHERE article_id = $1 ORDER BY created_at ASC;', [article_id])
 
+      .then(comment => {
+  
+
+        if (comment.rows.length === 0) {
+          
+          return Promise.reject(      
+            `article not found!!!`
+          );
+        } else {
+        return comment.rows;
+        }
+      });
+  }
+
+  const insertComments = (article_id, body, username) =>{
+    
+    return db.query(`INSERT INTO comments (body,author,article_id)
+    VALUES ($1,$2,$3) RETURNING *;`, 
+    [body, username, article_id])
+
+   
+      .then((data) => {
+        if (data.rows.length === 0) {
+          
+          return Promise.reject(      
+            `article not found!!!`
+          );
+        } else {
+ return data.rows;
+        }
+        })
+      }
+
+
+
+    const incVoteById = (article_id, inc_votes) => {
+    
+
+        if (inc_votes === undefined) throw ({status: 400, message: 'Bad request'})
+        else 
+
+        return db.query('UPDATE articles SET votes = votes + $2 WHERE article_id= $1 RETURNING *;',[article_id, inc_votes])
+
+            .then((response) => {
+           
+                 return response.rows;
+            })
+    }
+  
+
+      
  
 
-
-
+    
+  
 
    module.exports = {
-    fetchArticles, getArticlesId,
+    fetchArticles, getArticlesId, fetchCommentsById, insertComments, incVoteById,
   };
 
   
