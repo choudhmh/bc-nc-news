@@ -37,13 +37,18 @@ function fetchArticles() {
 
       .then(comment => {
   
-
         if (comment.rows.length === 0) {
-          
-          return Promise.reject(      
-            `article not found!!!`
+ 
+          return Promise.reject(                
+            {
+              status: 404,
+              message: `Not Found` 
+            }
           );
-        } else {
+        } 
+
+      
+        else {
         return comment.rows;
         }
       });
@@ -85,6 +90,18 @@ function fetchArticles() {
     }
   
 
+
+// const getQuery = (article_id, topic) =>{
+  
+//   return db.query('SELECT owner, title, reviews.review_id, category, review_img_url, reviews.created_at, reviews.votes, designer, CAST(COUNT(comment_id) AS INT) comment_count FROM reviews LEFT JOIN comment ON comments.review_id = reviews.review_id WHERE category = $1 GROUP BY reviews.review_id ORDER BY ${sort_by} ${order}')
+
+//   .then((result) => {
+
+// console.log(result)
+//     return result.rows;
+//   });
+
+// }
       
  
 
@@ -92,7 +109,7 @@ function fetchArticles() {
   
 
    module.exports = {
-    fetchArticles, getArticlesId, fetchCommentsById, insertComments, incVoteById,
+    fetchArticles, getArticlesId, fetchCommentsById, insertComments, incVoteById,  
   };
 
   
