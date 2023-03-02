@@ -381,7 +381,7 @@ describe('api/users', () => {
 })
 
 
-// describe('api/articles', ()=>{
+// describe.only('api/articles', ()=>{
 
 // test('Should accept a topic query and will respond with only articles are of that topic', () => {
 //   return request(app)
@@ -390,17 +390,18 @@ describe('api/users', () => {
 //       .then(({ body }) => {
 //           expect(body.articles).toEqual(
 //               {
-//                   title: 'UNCOVERED: catspiracy to bring down democracy',
-//                   topic: 'cats',
-//                   author: 'rogersop',
-//                   body: 'Bastet walks amongst us, and the cats are taking arms!',
-//                   created_at: expect.any(String),
-//                   votes: 0,
-//                   comment_count: "2",
-//                   article_id: 5,
-//                   total_count: "1"
+//                 article_id: 5, 
+//                 author: "rogersop", 
+//                 body: "Bastet walks amongst us, and the cats are taking arms!", 
+//                 comment_count: "2", 
+//                 created_at: expect.any(String), 
+//                 title: "UNCOVERED: catspiracy to bring down democracy", 
+//                 topic: "cats", 
+//                 total_count: "1", 
+//                 votes: 0
+                
 //               }
 //           )
 //       })
 // })
-//  })
+ //})
