@@ -102,6 +102,9 @@ const getQuery = (article_id, topic) =>{
   });
 
 }
+
+
+
       
  
 
@@ -109,7 +112,9 @@ const getQuery = (article_id, topic) =>{
   
 
    module.exports = {
+
     fetchArticles, getArticlesId, fetchCommentsById, insertComments, incVoteById,getQuery,  
+
   };
 
   
