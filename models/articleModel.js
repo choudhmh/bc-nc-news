@@ -91,17 +91,20 @@ function fetchArticles() {
   
 
 
-// const getQuery = (article_id, topic) =>{
+const getQuery = (article_id, topic) =>{
   
-//   return db.query('SELECT articles.article_id, articles.author, articles.title, articles.topic, articles.created_at, articles.votes, articles.article_img_url, COUNT(comments.comment_id)AS INT) AS comment_count FROM article LEFT OUTER JOIN comments ON comments.article_id = articles.article_id COUNT(DISTINCT articles.article_id) AS total_count ORDER BY created_at DESC;', [article_id, topic])
+  return db.query('SELECT owner, title, reviews.review_id, category, review_img_url, reviews.created_at, reviews.votes, designer, CAST(COUNT(comment_id) AS INT) comment_count FROM reviews LEFT JOIN comment ON comments.review_id = reviews.review_id WHERE category = $1 GROUP BY reviews.review_id ORDER BY ${sort_by} ${order}')
 
-//   .then((result) => {
+  .then((result) => {
 
-// console.log(result)
-//     return result.rows;
-//   });
 
-// }
+    return result.rows;
+  });
+
+}
+
+
+
       
  
 
@@ -109,7 +112,9 @@ function fetchArticles() {
   
 
    module.exports = {
-    fetchArticles, getArticlesId, fetchCommentsById, insertComments, incVoteById,  
+
+    fetchArticles, getArticlesId, fetchCommentsById, insertComments, incVoteById,getQuery,  
+
   };
 
   
