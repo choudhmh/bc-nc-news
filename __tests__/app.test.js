@@ -89,7 +89,7 @@ beforeEach(() => {
 
           let articles = response.body.article
 
-        
+       
 
           expect(articles).toBeInstanceOf(Object);
           expect(articles.length).toBe(1);
@@ -103,7 +103,8 @@ beforeEach(() => {
                 topic: 'mitch',
                 created_at: '2020-07-09T20:11:00.000Z',
                 votes: 100,
-                comment_count: 11
+                comment_count: 11,
+                body: "I find this existence challenging"
           }))
         });
     });
