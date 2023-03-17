@@ -25,6 +25,8 @@ const {
   
 } = require('./controllers/users');
 
+const {deleteCommentById, } = require('./controllers/comments')
+
 const app = express();
 app.use(express.json());
 
@@ -41,6 +43,8 @@ app.get('/api/articles/:article_id/comments', getCommentById)
 
 app.post('/api/articles/:article_id/comments', postCommentsById)
 
+app.delete('/api/comments/:comment_id', deleteCommentById);
+
 
 app.patch('/api/articles/:article_id', patchArticleById)
 
@@ -51,9 +55,7 @@ app.get('/api/users', getUsers)
 //app.get('/api/articles', getArticeQuery)
 
 
-app.all("/*", (req, res) => {
-  res.status(404).send({ message: "route not found" });
-});
+
 
 
 app.use(handleCustomErrors);

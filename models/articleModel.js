@@ -90,7 +90,6 @@ function fetchArticles() {
     }
   
 
-
 const getQuery = (article_id, topic) =>{
   
   return db.query('SELECT owner, title, reviews.review_id, category, review_img_url, reviews.created_at, reviews.votes, designer, CAST(COUNT(comment_id) AS INT) comment_count FROM reviews LEFT JOIN comment ON comments.review_id = reviews.review_id WHERE category = $1 GROUP BY reviews.review_id ORDER BY ${sort_by} ${order}')
@@ -105,10 +104,7 @@ const getQuery = (article_id, topic) =>{
 
 
 
-      
- 
 
-    
   
 
    module.exports = {
